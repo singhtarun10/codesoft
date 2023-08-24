@@ -1,108 +1,69 @@
-# Task 1 To-Do List
-
-from tkinter import *
+# import library
+import tkinter as tk
 from tkinter import messagebox
-import tkinter.font
 
-wn = Tk()
-wn.title("To-Do List")
-wn.iconbitmap('Icon.ico')
-wn.minsize(width=500, height=500)
-wn.maxsize(width=500, height=500)
-
-
-# set window color
-wn.configure(bg='blue')
-
-# Create an object of type Font from tkinter.
-Desired_font = tkinter.font.Font(family="Comic Sans MS",
-                                 size=15,
-                                 weight="bold")
-Desired_font1 = tkinter.font.Font(family="Comic Sans MS",
-                                  size=10,
-                                  weight="bold")
-Desired_font1_list = tkinter.font.Font(family="Comic Sans MS",
-                                       size=13,
-                                       weight="bold")
-
-
-# Functions
+# Define function for task add
 def add_task():
-    if var.get() == "":
-        messagebox.showwarning("Plz Enter your Task")
+    task=entry.get()
+    if task:
+        listbox.insert(tk.END,task)
+        entry.delete(0,tk.END)
     else:
-        x = var.get()
-        mylist.insert(END, x)
-    en.delete(0, 'end')
-
-
-def rem():
-    mylist.delete(ANCHOR)
-
-
-def edit():
-    end_index = mylist.index("end")
-    if end_index != 0:
-        if var.get() == "":
-            messagebox.showwarning("Warning", "Plz Enter your Task")
-        else:
-            task_index = mylist.curselection()
-            if task_index:
-                new_task = en.get()
-                if new_task:
-                    mylist.delete(task_index)
-                    mylist.insert(task_index, new_task)
-                    en.delete(0, 'end')
-            else:
-                messagebox.showinfo("Warning", "Select Your Task  to replace it.")
+        messagebox.showwarning("please enter the task")
+    
+# Define function for delete a task
+def delete_task():
+    task=listbox.curselection()
+    if task:
+        listbox.delete(task)
     else:
-        messagebox.showinfo( "ADD Your Task First.")
+        messagebox.showwarning("please select the task")
+
+# Define function for clear list box
+def clearall():
+    listbox.delete(0,tk.END)
+
+# Define function for edit task
+def edit_task():
+    task=listbox.curselection()
+    if task:
+        listbox.delete(task)
+        newtask=entry.get()
+        listbox.insert(task,newtask)
+
+# main function
+# create a parent window
+window=tk.Tk()
+window.title("To Do List")
+
+# Create a frame 
+frame=tk.Frame(window)
+frame.pack(pady=10)
+
+# Add entry for user input
+entry=tk.Entry(frame,width=50)
+entry.pack(padx=5,side=tk.LEFT)
+
+# Add button for task add
+button=tk.Button(frame,text="Add Task",font=20,command=add_task)
+button.pack(padx=5,pady=10)
 
 
-# Label
-lb1 = Label(wn, text='To-Do List', bg="blue", fg="white", font=Desired_font)
-lb1.place(x=150, y=0)
 
-lb = Label(wn, text='My Tasks', bg="blue", fg="white", font=Desired_font)
-lb.place(x=150, y=80)
+# Add button for delete task
+button=tk.Button(text="Delete",font=20,command=delete_task)
+button.pack(padx=5,pady=10)
 
-# Entry
+# Add button for delete task
+button=tk.Button(text="EDIT",font=20,command=edit_task)
+button.pack(padx=5,pady=10)
 
-var = StringVar()
-en = Entry(wn, bd='3', textvariable=var, width=40)
-en.place(x=30, y=42)
+# Add button for clear all task
+button=tk.Button(text="Clear All",font=20,command=clearall)
+button.pack(padx=5,pady=10)
 
-# Button
-b1 = Button(wn, text='ADD TASK', bg="Green", fg="white", font=Desired_font1, bd=3, command=add_task)
-b1.place(x=300, y=42)
+# Create a list box 
+listbox=tk.Listbox(height=15,width=50)
+listbox.pack(pady=5)
 
-b2 = Button(wn, text="Complete", bg="red", fg="white", font=Desired_font, bd=3, command=rem)
-b2.place(x=222, y=400)
-
-b3 = Button(wn, text="Edit my task", bg="Orange", fg="white", font=Desired_font, bd=3, command=edit)
-b3.place(x=100, y=400)
-
-# Frame
-
-myframe = Frame(wn, bd=3, relief=RIDGE)
-myframe.place(x=50, y=125, width=300, height=250)
-
-# Scroll bar
-scr_x = Scrollbar(myframe, orient=HORIZONTAL)
-scr_y = Scrollbar(myframe, orient=VERTICAL)
-
-scr_x.pack(side=BOTTOM, fill=X)
-scr_y.pack(side=RIGHT, fill=Y)
-
-# List
-mylist = Listbox(myframe, font=Desired_font1_list, width=300, height=300, xscrollcommand=scr_x.set,
-                 yscrollcommand=scr_y.set)
-
-
-mylist.pack()
-
-# Config
-scr_x.config(command=mylist.xview)
-scr_y.config(command=mylist.yview)
-
-wn.mainloop()
+window.mainloop()
